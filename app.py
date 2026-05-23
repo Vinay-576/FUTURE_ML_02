@@ -13,7 +13,7 @@ nltk.download('stopwords')
 nlp = spacy.load("en_core_web_sm")
 nltk_stop_words = set(stopwords.words('english'))
 
-st.title("🎫 AI Support Ticket Classifier (No Joblib)")
+st.title("🎫 AI Support Ticket Classifier")
 
 # 🔹 Cleaning Function
 def advanced_nlp_clean(text):
