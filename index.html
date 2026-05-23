@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Support Ticket Dashboard</title>
+    <link rel="stylesheet" href="styles.css">
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <!-- Interactive Space Background -->
+    <canvas id="spaceBg"></canvas>
+    
+    <div class="container">
+        <header>
+            <h1>🤖 AI Support Ticket Classifier</h1>
+            <p>Analyze and predict ticket categories and priorities instantly.</p>
+        </header>
+
+        <section class="prediction-section card">
+            <h2>Enter your issue:</h2>
+            <textarea id="ticketInput" rows="4" placeholder="e.g., I am so angry! TV not working, want money back..."></textarea>
+            <button id="predictBtn" class="glow-btn">Predict</button>
+
+            <div id="resultCard" class="result-card hidden">
+                <h3>Prediction Result</h3>
+                <p><strong>Cleaned Text:</strong> <span id="resCleaned">...</span></p>
+                <div class="badges">
+                    <span id="resCategory" class="badge category-badge">Category: N/A</span>
+                    <span id="resPriority" class="badge priority-badge">Priority: N/A</span>
+                </div>
+            </div>
+        </section>
+
+        <h2 class="dashboard-title">Ticket Analytics Dashboard</h2>
+        <section class="dashboard">
+            <div class="chart-container card">
+                <canvas id="lineChart"></canvas>
+            </div>
+            <div class="chart-container card">
+                <canvas id="barChart"></canvas>
+            </div>
+            <div class="chart-container card">
+                <canvas id="pieChart"></canvas>
+            </div>
+        </section>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

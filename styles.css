@@ -1,0 +1,167 @@
+/* Global Styles & Reset */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #ffffff;
+    /* Fallback dark background in case canvas fails */
+    background-color: #020205; 
+    overflow-x: hidden;
+}
+
+/* Space Canvas Background */
+#spaceBg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: -1;
+    background: radial-gradient(circle at center, #0a0a2a 0%, #000000 100%);
+}
+
+.container {
+    max-width: 1400px; /* Increased max-width for larger graphs */
+    margin: 0 auto;
+    padding: 2rem;
+    position: relative; /* Keeps content above the canvas */
+    z-index: 1;
+}
+
+header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+header h1 {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+}
+
+/* Cards with Hover Animation */
+.card {
+    background: rgba(15, 15, 25, 0.75);
+    border: 1px solid #2a2a40;
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+    backdrop-filter: blur(12px);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 30px rgba(0, 195, 255, 0.2);
+    border-color: rgba(0, 195, 255, 0.5);
+}
+
+textarea {
+    width: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    border: 1px solid #444;
+    color: #fff;
+    padding: 1rem;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    resize: vertical;
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+textarea:focus {
+    outline: none;
+    border-color: #00c3ff;
+    box-shadow: 0 0 15px rgba(0, 195, 255, 0.3);
+}
+
+/* Glowing Button */
+.glow-btn {
+    display: inline-block;
+    margin-top: 1rem;
+    padding: 0.75rem 2rem;
+    background: transparent;
+    color: #00c3ff;
+    border: 2px solid #00c3ff;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.3s ease;
+}
+
+.glow-btn:hover {
+    background: #00c3ff;
+    color: #000;
+    box-shadow: 0 0 15px #00c3ff, 0 0 30px #00c3ff;
+    transform: scale(1.05);
+}
+
+/* Prediction Results */
+.hidden { display: none; }
+
+.result-card {
+    margin-top: 1.5rem;
+    padding: 1rem;
+    background: rgba(0, 255, 136, 0.05);
+    border-left: 4px solid #00ff88;
+    border-radius: 8px;
+}
+
+.badges {
+    margin-top: 1rem;
+    display: flex;
+    gap: 1rem;
+}
+
+.badge {
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-weight: bold;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.category-badge {
+    background: rgba(0, 195, 255, 0.15);
+    color: #00c3ff;
+    border: 1px solid rgba(0, 195, 255, 0.3);
+}
+
+.priority-badge {
+    background: rgba(255, 60, 60, 0.15);
+    color: #ff4d4d;
+    border: 1px solid rgba(255, 60, 60, 0.3);
+}
+
+/* Dashboard Grid */
+.dashboard-title {
+    text-align: center;
+    margin: 3rem 0 1.5rem;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+    font-size: 2rem;
+}
+
+.dashboard {
+    display: grid;
+    /* Increased minimum width to make graphs wider */
+    grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+    gap: 2rem;
+}
+
+.chart-container {
+    position: relative;
+    /* Increased height for larger visual presence */
+    height: 400px;
+    width: 100%;
+}
+
+/* Make Pie chart span full width if it's the odd one out on desktop */
+.dashboard .chart-container:last-child {
+    grid-column: 1 / -1;
+    height: 450px; 
+}
