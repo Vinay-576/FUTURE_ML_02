@@ -96,4 +96,4 @@ if st.button("Predict"):
         st.warning(f"Priority: {pri}")
 
     else:
-        st.error("Please enter some text")
+        st.error("Please enter some text !!")
