@@ -6,18 +6,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const canvas = document.getElementById('spaceBg');
     const ctx = canvas.getContext('2d');
     
-    // Set initial canvas size
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
 
     let particlesArray = [];
-    
-    // Mouse object for interaction
-    const mouse = {
-        x: null,
-        y: null,
-        radius: 150 // Connection radius
-    };
+    const mouse = { x: null, y: null, radius: 150 };
 
     window.addEventListener('mousemove', (event) => {
         mouse.x = event.x;
@@ -112,7 +105,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     // ==========================================
-    // 📊 DASHBOARD & PREDICTION LOGIC
+    // 📊 DASHBOARD & DYNAMIC GRAPH LOGIC
     // ==========================================
     const predictBtn = document.getElementById('predictBtn');
     const ticketInput = document.getElementById('ticketInput');
@@ -121,12 +114,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const resCategory = document.getElementById('resCategory');
     const resPriority = document.getElementById('resPriority');
 
-    // Global Chart.js sizing and font configuration
     Chart.defaults.color = '#e0e0e0';
     Chart.defaults.borderColor = 'rgba(255, 255, 255, 0.1)';
     Chart.defaults.font.size = 14; 
 
-    // Shared Animation Config for bouncy updates
     const smoothAnimation = {
         duration: 1200,
         easing: 'easeOutQuart'
@@ -155,14 +146,13 @@ document.addEventListener('DOMContentLoaded', () => {
             responsive: true,
             maintainAspectRatio: false,
             animation: smoothAnimation,
-            plugins: { 
-                title: { display: true, text: 'Ticket Volume Trend', font: { size: 18 } } 
-            }
+            plugins: { title: { display: true, text: 'Ticket Volume Trend', font: { size: 18 } } }
         }
     });
 
-    // --- Bar Chart ---
-    const barLabels = ['Refund Request', 'Technical Issue', 'Cancellation Request', 'Product Inquiry', 'Billing Inquiry', 'Complaint'];
+    // --- Bar Chart (Categories) ---
+    // Strict alignment with dataset categories
+    const barLabels = ['Refund Request', 'Technical Issue', 'Cancellation Request', 'Product Inquiry', 'Billing Inquiry'];
     const barCtx = document.getElementById('barChart').getContext('2d');
     const barChart = new Chart(barCtx, {
         type: 'bar',
@@ -170,14 +160,13 @@ document.addEventListener('DOMContentLoaded', () => {
             labels: barLabels,
             datasets: [{
                 label: 'Number of Tickets',
-                data: [1752, 1747, 1695, 1641, 1634, 0],
+                data: [1752, 1747, 1695, 1641, 1634],
                 backgroundColor: [
                     'rgba(255, 99, 132, 0.8)',
                     'rgba(54, 162, 235, 0.8)',
                     'rgba(255, 206, 86, 0.8)',
                     'rgba(75, 192, 192, 0.8)',
-                    'rgba(153, 102, 255, 0.8)',
-                    'rgba(235, 130, 54, 0.8)'
+                    'rgba(153, 102, 255, 0.8)'
                 ],
                 borderWidth: 2, 
                 borderRadius: 6
@@ -187,13 +176,11 @@ document.addEventListener('DOMContentLoaded', () => {
             responsive: true,
             maintainAspectRatio: false,
             animation: smoothAnimation,
-            plugins: { 
-                title: { display: true, text: 'Tickets by Category', font: { size: 18 } } 
-            }
+            plugins: { title: { display: true, text: 'Tickets by Category', font: { size: 18 } } }
         }
     });
 
-    // --- Pie Chart ---
+    // --- Pie Chart (Priorities) ---
     const pieLabels = ['Medium', 'Critical', 'High', 'Low'];
     const pieCtx = document.getElementById('pieChart').getContext('2d');
     const pieChart = new Chart(pieCtx, {
@@ -217,13 +204,14 @@ document.addEventListener('DOMContentLoaded', () => {
             responsive: true,
             maintainAspectRatio: false,
             animation: { animateScale: true, animateRotate: true, duration: 1200 },
-            plugins: { 
-                title: { display: true, text: 'Priority Distribution', font: { size: 18 } } 
-            }
+            plugins: { title: { display: true, text: 'Priority Distribution', font: { size: 18 } } }
         }
     });
 
-    // --- Prediction Click Event & Dynamic Updates ---
+
+    // ==========================================
+    // 🧠 ADVANCED MOCK AI PREDICTION ENGINE
+    // ==========================================
     predictBtn.addEventListener('click', () => {
         const text = ticketInput.value.trim().toLowerCase();
         if (!text) {
@@ -231,22 +219,38 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        // Mock Cleaning
+        // Mock Text Cleaning
         let cleaned = text.replace(/\{.*?\}/g, '').replace(/[\n\t\r]/g, ' ');
         resCleaned.textContent = cleaned;
 
         // Default Predictions
-        let category = "technical issue";
-        let priority = "low";
+        let category = "Product Inquiry"; 
+        let priority = "Low";
 
-        // Applying custom rules from backend model
-        const urgentWords = ["angry", "refund", "money back", "not working", "broken", "worst"];
-        
-        if (urgentWords.some(word => cleaned.includes(word))) {
-            priority = "high";
+        // 1. Determine Category based on keywords
+        if (cleaned.match(/refund|money back|return|reimburse/)) {
+            category = "Refund Request";
+        } else if (cleaned.match(/cancel|unsubscribe|stop|close account/)) {
+            category = "Cancellation Request";
+        } else if (cleaned.match(/charge|invoice|receipt|fee|payment|card|bill/)) {
+            category = "Billing Inquiry";
+        } else if (cleaned.match(/broken|not working|bug|error|glitch|crash|turn on|slow|freeze|issue/)) {
+            category = "Technical Issue";
         }
-        if (cleaned.includes("refund") || cleaned.includes("money back")) {
-            category = "complaint";
+
+        // 2. Determine Priority based on sentiment/urgency
+        if (cleaned.match(/angry|worst|terrible|unacceptable|lawsuit|scam|threat/)) {
+            priority = "Critical";
+        } else if (cleaned.match(/urgent|asap|immediately|now|fast/)) {
+            priority = "High";
+        } else if (cleaned.match(/soon|when|please|delay/)) {
+            priority = "Medium";
+        }
+
+        // 3. Applying custom boost rules from backend data processing notebook
+        const urgentWords = ["angry", "refund", "money back", "not working", "broken", "worst"];
+        if (urgentWords.some(word => cleaned.includes(word))) {
+            if (priority === "Low" || priority === "Medium") priority = "High"; 
         }
 
         // Display results
@@ -254,22 +258,22 @@ document.addEventListener('DOMContentLoaded', () => {
         resPriority.textContent = `Priority: ${priority}`;
         resultCard.classList.remove('hidden');
         
-        // Trigger smooth visual graph updates (Adding 100 for dramatic visual effect)
-        const targetCategory = category.replace(/\b\w/g, c => c.toUpperCase());
-        const catIndex = barLabels.indexOf(targetCategory);
+        // 4. Update the Specific Graphs dynamically
+        const catIndex = barLabels.indexOf(category);
         if (catIndex !== -1) {
-            barChart.data.datasets[0].data[catIndex] += 100; 
+            // Adding 15 visually bumps the bar high enough so you see it move on the dashboard
+            barChart.data.datasets[0].data[catIndex] += 15; 
             barChart.update();
         }
 
-        const targetPriority = priority.replace(/\b\w/g, c => c.toUpperCase());
-        const priIndex = pieLabels.indexOf(targetPriority);
+        const priIndex = pieLabels.indexOf(priority);
         if (priIndex !== -1) {
-            pieChart.data.datasets[0].data[priIndex] += 100; 
+            pieChart.data.datasets[0].data[priIndex] += 15; 
             pieChart.update();
         }
 
-        lineChart.data.datasets[0].data[5] += 100;
+        // Increment the current month line chart
+        lineChart.data.datasets[0].data[5] += 15;
         lineChart.update();
     });
 });
