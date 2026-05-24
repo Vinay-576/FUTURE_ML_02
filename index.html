@@ -5,11 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AI Support Ticket Dashboard</title>
     <link rel="stylesheet" href="styles.css">
-    <!-- Chart.js CDN -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-    <!-- Interactive Space Background -->
     <canvas id="spaceBg"></canvas>
     
     <div class="container">
@@ -18,6 +16,43 @@
             <p>Analyze and predict ticket categories and priorities instantly.</p>
         </header>
 
+        <!-- ==================== KPI CARDS ==================== -->
+        <section class="kpi-grid">
+            <div class="kpi-card card">
+                <div class="kpi-icon">🎫</div>
+                <div class="kpi-info">
+                    <div class="kpi-value" id="kpiTotalTickets">8,469</div>
+                    <div class="kpi-label">Total Tickets Analyzed</div>
+                    <div class="kpi-delta positive">+846 this month</div>
+                </div>
+            </div>
+            <div class="kpi-card card">
+                <div class="kpi-icon">🏆</div>
+                <div class="kpi-info">
+                    <div class="kpi-value" id="kpiTopCategory">Refund</div>
+                    <div class="kpi-label">Top Category</div>
+                    <div class="kpi-delta neutral" id="kpiTopCatPct">20.7% of all tickets</div>
+                </div>
+            </div>
+            <div class="kpi-card card">
+                <div class="kpi-icon">🚨</div>
+                <div class="kpi-info">
+                    <div class="kpi-value" id="kpiCriticalRate">25.1%</div>
+                    <div class="kpi-label">Critical Priority Rate</div>
+                    <div class="kpi-delta negative">↑ 3.2% vs last month</div>
+                </div>
+            </div>
+            <div class="kpi-card card">
+                <div class="kpi-icon">🎯</div>
+                <div class="kpi-info">
+                    <div class="kpi-value" id="kpiAvgConfidence">—</div>
+                    <div class="kpi-label">Avg Session Confidence</div>
+                    <div class="kpi-delta neutral" id="kpiSessionCount">0 predictions this session</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== PREDICTION SECTION ==================== -->
         <section class="prediction-section card">
             <h2>Enter your issue:</h2>
             <textarea id="ticketInput" rows="4" placeholder="e.g., I am so angry! TV not working, want money back..."></textarea>
@@ -30,10 +65,29 @@
                     <span id="resCategory" class="badge category-badge">Category: N/A</span>
                     <span id="resPriority" class="badge priority-badge">Priority: N/A</span>
                 </div>
+                <!-- Confidence Bar -->
+                <div class="confidence-section">
+                    <div class="confidence-label">
+                        <span>Model Confidence</span>
+                        <span id="confidenceValue">—</span>
+                    </div>
+                    <div class="confidence-track">
+                        <div class="confidence-fill" id="confidenceFill"></div>
+                    </div>
+                    <div class="confidence-ticks">
+                        <span>0%</span><span>25%</span><span>50%</span><span>75%</span><span>100%</span>
+                    </div>
+                </div>
+                <!-- Keyword Tags -->
+                <div class="keyword-section">
+                    <span class="kw-label">Detected Keywords:</span>
+                    <div id="keywordTags" class="keyword-tags"></div>
+                </div>
             </div>
         </section>
 
-        <h2 class="dashboard-title">Ticket Analytics Dashboard</h2>
+        <!-- ==================== DASHBOARD CHARTS ==================== -->
+        <h2 class="dashboard-title">📊 Ticket Analytics Dashboard</h2>
         <section class="dashboard">
             <div class="chart-container card">
                 <canvas id="lineChart"></canvas>
@@ -43,6 +97,39 @@
             </div>
             <div class="chart-container card">
                 <canvas id="pieChart"></canvas>
+            </div>
+            <div class="chart-container card">
+                <canvas id="hbarChart"></canvas>
+            </div>
+            <div class="chart-container chart-wide card">
+                <canvas id="radarChart"></canvas>
+            </div>
+        </section>
+
+        <!-- ==================== SESSION HISTORY ==================== -->
+        <div class="session-header">
+            <h2 class="dashboard-title" style="margin:0">🕓 Session Prediction History</h2>
+            <button id="exportBtn" class="export-btn" disabled>⬇ Export CSV</button>
+        </div>
+        <section class="card history-section">
+            <div id="emptyState" class="empty-state">
+                <span class="empty-icon">📋</span>
+                <p>No predictions yet. Enter a ticket above to get started.</p>
+            </div>
+            <div id="historyTableWrap" class="hidden">
+                <table class="history-table" id="historyTable">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Time</th>
+                            <th>Ticket Snippet</th>
+                            <th>Category</th>
+                            <th>Priority</th>
+                            <th>Confidence</th>
+                        </tr>
+                    </thead>
+                    <tbody id="historyBody"></tbody>
+                </table>
             </div>
         </section>
     </div>
